@@ -1,0 +1,146 @@
+CREATE SCHEMA CS3_SI1N ;
+USE CS3_SI1N;
+
+CREATE TABLE CLIENTES (
+    cod_cli INT PRIMARY KEY AUTO_INCREMENT,
+    cnpj_cli VARCHAR(14) NOT NULL,
+    razao_social_cli VARCHAR(100) NOT NULL,
+    ramo_atividade_cli VARCHAR(50),
+    data_cadastramento_cli DATE NOT NULL,
+    pessoa_contato_cli VARCHAR(100)  
+);
+
+CREATE TABLE TIPOS_ENDERECO (
+    cod_tip_end INT PRIMARY KEY,
+    nome_tip_end VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE TIPOS_COMPONENTE (
+    cod_tipo_componentes INT PRIMARY KEY,
+    nome_tipo_componentes VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE MAQUINAS (
+    id_maquias INT PRIMARY KEY,
+    tempo_vida_maquias INT NOT NULL,
+    data_compra_maquias DATE NOT NULL,
+    data_fim_garantia_maquias DATE NOT NULL
+);
+
+CREATE TABLE EMPREGADOS (
+    id_empregados INT PRIMARY KEY,
+    nome_empregados VARCHAR(100) NOT NULL,
+    cargo_empregados VARCHAR(50),
+    salario_empregados DECIMAL(10, 2),
+    data_admissao_empregados DATE NOT NULL,
+    qualificacoes_empregados TEXT,
+    id_end INT PRIMARY KEY,
+    PRIMARY KEY (id_empregados,id_end),
+    CONSTRAINT FK_id_end FOREIGN KEY (id_end) REFERENCES ENDERECOS(id_end)
+);
+
+CREATE TABLE EMPRESAS (
+    cnpj_empresas VARCHAR(14) PRIMARY KEY,
+    razao_social_empresas VARCHAR(100) NOT NULL,
+    pessoa_contato_empresas VARCHAR(100) NOT NULL,
+    telefone_empresas varchar(100) not null,
+    id_end INT PRIMARY KEY,
+    PRIMARY KEY (cnpj_empresas,id_end),
+    CONSTRAINT FK_id_end FOREIGN KEY (id_end) REFERENCES ENDERECOS(id_end)
+);
+
+CREATE TABLE FORNECEDORES (
+    cnpj_fornecedores VARCHAR(14) PRIMARY KEY,
+    razao_social_fornecedores VARCHAR(100) NOT NULL,
+    pessoa_contato_fornecedores VARCHAR(100) NOT NULL,
+    telefone VARCHAL(100) NOT NULL,
+    id_end INT PRIMARY KEY,
+    PRIMARY KEY (cnpj_fornecedores,id_end),
+    CONSTRAINT FK_id_end FOREIGN KEY (id_end) REFERENCES ENDERECOS(id_end)
+);
+
+CREATE TABLE ENDERECOS (
+    id_end INT PRIMARY KEY,
+    numero_end VARCHAR(10) NOT NULL,
+    logradouro_end VARCHAR(100) NOT NULL,
+    complemento_end VARCHAR(50),
+    CEP_end VARCHAR(10) NOT NULL,
+    bairro_end VARCHAR(50) NOT NULL,
+    cidade_end VARCHAR(50) NOT NULL,
+    UF_end VARCHAR(50) NOT NULL,
+    cod_tip_end INT PRIMARY KEY,
+    PRIMARY KEY (cod_tip_end,id_end),
+    CONSTRAINT FK_COD_TIP_END FOREIGN KEY (cod_tip_end) REFERENCES TIPOS_ENDERECO (cod_tip_end)
+);
+
+CREATE TABLE ENCOMENDAS (
+    id_encomendas INT PRIMARY KEY,
+    data_inclusao_encomendas DATE NOT NULL,
+    valor_total_encomendas DECIMAL(10, 2),
+    valor_desconto_encomendas DECIMAL(10, 2),
+    valor_liquido_encomendas DECIMAL(10, 2),
+    forma_pagamento_encomendas_id INT,
+    quantidade_parcelas_encomendas INT,
+    cod_cli INT PRIMARY KEY,
+    PRIMARY KEY (id_encomendas,cod_cli)
+  CONSTRAINT FK_cod_cli  FOREIGN KEY (cod_cli) REFERENCES CLIENTES(cod_cli)
+);
+
+CREATE TABLE PRODUTOS (
+    id_produtos INT PRIMARY KEY ,
+    nome_produtos VARCHAR(100) NOT NULL,
+    cor_produtos VARCHAR(30),
+    dimensoes_produtos VARCHAR(50),
+    peso_produtos DECIMAL(10, 2),
+    preco_produtos DECIMAL(10, 2) NOT NULL,
+    tempo_fabricacao_produtos INT NOT NULL,
+    desenho_produto_produtos TEXT,
+    horas_mao_obra_produtos INT NOT NULL,
+    id_encomendas INT PRIMARY KEY,
+    cod_componentes INT PRIMARY KEY,
+    PRIMARY KEY (id_produtos,id_encomendas,id_encomendas),
+    CONSTRAINT FK_id_encomendas  FOREIGN KEY (id_encomendas) REFERENCES ENCOMENDAS(id_encomendas),
+    CONSTRAINT FK_cod_componentes  FOREIGN KEY (cod_componentes) REFERENCES COMPONENTES(cod_componentes)
+);
+
+CREATE TABLE COMPONENTES (
+    cod_componentes INT PRIMARY KEY,
+    nome_componentes VARCHAR(100) NOT NULL,
+    quantidade_estoque_componentes INT NOT NULL,
+    preco_unitario_componentes DECIMAL(10, 2) NOT NULL,
+    unidade_componentes VARCHAR(20) NOT NULL,
+    cod_tipo_componentes INT PRIMARY KEY
+    cnpj_fornecedores VARCHAR(14) PRIMARY KEY,
+    PRIMARY KEY (cod_componentes,cod_tipo_componentes,cnpj_fornecedores),
+    CONSTRAINT FK_cod_tipo_componentes FOREIGN KEY (tipo_componente_codigo) REFERENCES TIPOS_COMPONENTE(cod_tipo_componentes),
+    CONSTRAINT FK_cnpj_fornecedores FOREIGN KEY (cnpj_fornecedores) REFERENCES FORNECEDORES(cnpj_fornecedores)
+);
+
+CREATE TABLE RECURSOS_ESPECIFICOS (
+    id_RE INT PRIMARY KEY,
+    quantidade_necessaria_RE INT NOT NULL,
+    unidade_RE VARCHAR(20) NOT NULL,
+    tempo_uso_RE INT NOT NULL,
+    horas_mao_obra_RE INT NOT NULL,
+    id_produtos INT PRIMARY KEY,
+    PRIMARY KEY (id_RE,id_produtos),
+  CONSTRAINT FK_id_produtos  FOREIGN KEY (id_produtos) REFERENCES PRODUTOS(id_produtos)
+);
+
+CREATE TABLE REGISTRO_MANUTENCAO (
+    id_RM INT PRIMARY KEY,
+    data_RM DATE NOT NULL,
+    descricao_RM TEXT NOT NULL,
+    id_maquias INT PRIMARY KEY,
+    PRIMARY KEY (id_RM,id_maquias),
+ CONSTRAINT FK_id_maquias   FOREIGN KEY (id_maquias) REFERENCES MAQUINAS(id_maquias)
+);
+
+CREATE TABLE REGISTRO_SUPRIMENTOS (
+    id_RG INT PRIMARY KEY,
+    quantidade_RG INT NOT NULL,
+    data_necessidade_RG DATE NOT NULL,
+    id_produtos INT PRIMARY KEY,
+    PRIMARY KEY (id_RG,id_produtos),
+  CONSTRAINT FK_id_produtos  FOREIGN KEY (id_produtos) REFERENCES PRODUTOS(id_produtos)
+);
