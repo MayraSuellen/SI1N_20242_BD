@@ -1,65 +1,70 @@
--- Criar tabela Alunos
-CREATE TABLE Alunos (
-    ID_Aluno INT AUTO_INCREMENT PRIMARY KEY,
-    Nome VARCHAR(100) NOT NULL,
-    CPF VARCHAR(11) NOT NULL UNIQUE,
-    Data_Nascimento DATE NOT NULL,
-    Endereco VARCHAR(255)
+
+
+CREATE TABLE INSTRUTORES (
+    ID_instrutor INT PRIMARY KEY,
+    Nome_instrutor VARCHAR(100) NOT NULL,
+    Especialidade_instrutor VARCHAR(255)
 );
 
--- Criar tabela Instrutores
-CREATE TABLE Instrutores (
-    ID_Instrutor INT AUTO_INCREMENT PRIMARY KEY,
-    Nome VARCHAR(100) NOT NULL,
-    Especialidade VARCHAR(255)
+CREATE TABLE MODALIDADES (
+    ID_modalidade INT PRIMARY KEY,
+    Nome_modalidade VARCHAR(100) NOT NULL,
+    Descricao_modalidade TEXT NOT NULL
 );
 
--- Criar tabela Modalidades
-CREATE TABLE Modalidades (
-    ID_Modalidade INT AUTO_INCREMENT PRIMARY KEY,
-    Nome VARCHAR(100) NOT NULL,
-    Descricao TEXT
+CREAT TABLE ALUNOS(
+    ID_aluno PRIMARY KEY,
+    Nome_aluno VARCHAR(100) NOT NULL,
+    CPF_aluno VARCHAR(11) NOT NULL,
+    Data_Nascimento_aluno DATE NOT NULL,
+    rua_aluno  VARCHAR(45) DATE NOT NULL,
+    numrua_aluno INT,
+    bairro_aluno VARCHAR(45) NOT NULL,
+    cidade_aluno VARCHAR(45) NOT NULL,
+    uf_aluno VARCHAR(10) NOT NULL,
+    pais_aluno VARCHAR(30) NOT NULL,
+    telefone_aluno VARCHAR(15) NOT NULL
+    ID_modalidade INT PRIMARY KEY,
+    PRIMARY KEY (ID_aluno,ID_Modalidade),
+    CONSTRAINT FK_ID_modalidade FOREIGN KEY(ID_modalidade) REFERENCES MODALIDADES(ID_modalidade)
 );
 
--- Criar tabela Planos de Treinamento
-CREATE TABLE Planos_Treinamento (
-    ID_Plano INT AUTO_INCREMENT PRIMARY KEY,
-    ID_Aluno INT,
-    ID_Instrutor INT,
-    Descricao TEXT,
-    Data_Criacao DATE NOT NULL,
-    Data_Atualizacao DATE,
-    FOREIGN KEY (ID_Aluno) REFERENCES Alunos(ID_Aluno),
-    FOREIGN KEY (ID_Instrutor) REFERENCES Instrutores(ID_Instrutor)
+CREATE TABLE PLANOS_TREINAMENTOS (
+    ID_plano INT PRIMARY KEY,
+    Descricao_plano TEXT NOT NULL,
+    Data_Criacao_plano DATE NOT NULL,
+    Data_Atualizacao_plano DATE,
+    ID_aluno INT PRIMARY KEY,
+    ID_instrutor INT PRIMARY KEY,
+    CONSTRAINT FK_aluno FOREIGN KEY (ID_Aluno) REFERENCES ALUNOS(ID_aluno),
+    CONSTRAINT FK_instrutor FOREIGN KEY (ID_instrutor) REFERENCES INSTRUTORES(ID_instrutor)
 );
 
--- Criar tabela Aulas
-CREATE TABLE Aulas (
-    ID_Aula INT AUTO_INCREMENT PRIMARY KEY,
-    ID_Modalidade INT,
-    ID_Instrutor INT,
-    Horario TIME NOT NULL,
-    Capacidade INT NOT NULL,
-    Lotacao_Atual INT DEFAULT 0,
-    FOREIGN KEY (ID_Modalidade) REFERENCES Modalidades(ID_Modalidade),
-    FOREIGN KEY (ID_Instrutor) REFERENCES Instrutores(ID_Instrutor)
+CREATE TABLE AULAS (
+    ID_aula INT PRIMARY KEY,
+    ID_modalidade INT,
+    ID_instrutor INT,
+    Horario_aula TIME NOT NULL,
+    Capacidade_aula INT NOT NULL,
+    Lotacao_atual_aula INT DEFAULT 0,
+    CONSTRAINT FK_FOREIGN KEY (ID_Modalidade) REFERENCES Modalidades(ID_Modalidade),
+    CONSTRAINT FK_FOREIGN KEY (ID_Instrutor) REFERENCES Instrutores(ID_Instrutor)
 );
 
--- Criar tabela Pagamentos
-CREATE TABLE Pagamentos (
-    ID_Pagamento INT AUTO_INCREMENT PRIMARY KEY,
-    ID_Aluno INT,
-    Data_Pagamento DATE NOT NULL,
-    Valor DECIMAL(10, 2) NOT NULL,
-    Status ENUM('pago', 'pendente') NOT NULL,
-    FOREIGN KEY (ID_Aluno) REFERENCES Alunos(ID_Aluno)
+CREATE TABLE PAGAMENTOS (
+    ID_pagamento INT PRIMARY KEY,
+    Data_pagamento DATE NOT NULL,
+    Valor_pagamento DECIMAL(10, 2) NOT NULL,
+    Status_pagamento VARCHAR(30) NOT NULL,
+    ID_aluno INT PRIMARY KEY,
+    PRIMARY KEY(ID_pagamento,ID_aluno)
+    CONSTRAINT FK_ID_aluno FOREIGN KEY (ID_aluno) REFERENCES ALUNOS (ID_aluno)
 );
 
--- Criar tabela associativa Matriculas
-CREATE TABLE Matriculas (
-    ID_Aluno INT,
-    ID_Modalidade INT,
-    PRIMARY KEY (ID_Aluno, ID_Modalidade),
-    FOREIGN KEY (ID_Aluno) REFERENCES Alunos(ID_Aluno),
-    FOREIGN KEY (ID_Modalidade) REFERENCES Modalidades(ID_Modalidade)
+CREATE TABLE MATRICULAS (
+    ID_aluno INT PRIMARY KEY,
+    ID_modalidade INT PRIMARY KEY,
+    PRIMARY KEY (ID_aluno, ID_modalidade),
+   CONSTRAINT FK_ID_aluno FOREIGN KEY (ID_aluno) REFERENCES ALUNOS(ID_aluno),
+   CONSTRAINT FK_ID_modalidade  FOREIGN KEY (ID_modalidade) REFERENCES MODALIDADE(ID_modalidade)
 );
