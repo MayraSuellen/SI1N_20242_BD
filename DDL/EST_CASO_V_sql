@@ -1,0 +1,66 @@
+CREATE SCHEMA CS5_SI1N ;
+USE CS5_SI1N;
+
+CREATE TABLE CLIENTE (
+    CPF_cliente INT PRIMARY KEY,
+    nome_cliente VARCHAR(100) NOT NULL,
+    data_nascimento_cliente DATE NOT NULL,
+    rua_cliente  VARCHAR(45) DATE NOT NULL,
+    numrua_cliente INT,
+    bairro_cliente VARCHAR(45) NOT NULL,
+    cidade_cliente VARCHAR(45) NOT NULL,
+    uf_cliente VARCHAR(10) NOT NULL,
+    pais_cliente VARCHAR(30) NOT NULL,
+    status_fidelidade_cliente TEXT NOT NULL
+);
+
+CREATE TABLE FORNECEDORES (
+    id_fornecedor INT PRIMARY KEY,
+    nome_fornecedor VARCHAR(100) NOT NULL,
+    contato_fornecedor VARCHAR(100),
+    rua_fornecedo  VARCHAR(45) DATE NOT NULL,
+    numrua_fornecedo INT,
+    bairro_fornecedo VARCHAR(45) NOT NULL,
+    cidade_fornecedo VARCHAR(45) NOT NULL,
+    uf_fornecedo VARCHAR(10) NOT NULL,
+    pais_fornecedo VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE PRODUTOS (
+    id_produto INT PRIMARY KEY,
+    nome_produto VARCHAR(100) NOT NULL,
+    categoria_produto VARCHAR(50),
+    preco_produto DECIMAL(10, 2) NOT NULL,
+    estoque_produto INT NOT NULL,
+    id_fornecedor INT PRIMARY KEY,
+    PRIMARY KEY(id_produto,id_fornecedor)
+    CONSTRAINT FK_id_fornecedor FOREIGN KEY (id_fornecedor) REFERENCES FORNECEDORES(id_fornecedor)
+);
+
+CREATE TABLE VENDAS (
+    id_venda PRIMARY KEY,
+    data_venda DATETIME DEFAULT CURRENT_TIMESTAMP,
+    total_venda DECIMAL(10, 2) NOT NULL,
+    id_cliente INT PRIMARY KEY,
+    PRIMARY KEY (id_venda, id_cliente)
+    CONSTRAINT FK_id_cliente FOREIGN KEY (id_cliente) REFERENCES CLIENTE(id_cliente)
+);
+
+CREATE TABLE PAGAMENTOS (
+    id_pagamento INT PRIMARY KEY,
+    data_pagamento DATE NOT FULL,
+    valor_pagamento DECIMAL(10, 2) NOT NULL,
+    status_pagamento VARCHAR(30) NOT NULL,
+    id_venda INT PRIMARY KEY,
+    PRIMARY KEY (id_pagamento,id_venda)
+    CONSTRAINT FK_id_venda FOREIGN KEY (id_venda) REFERENCES VENDAS(id_venda)
+);
+
+CREATE TABLE Venda_Produtos (
+    id_venda INT PRIMARY KEY,
+    id_produto INT PRIMARY KEY,
+    quantidade INT NOT NULL,
+    PRIMARY KEY (id_venda, id_produto),
+    CONSTRAINT FK_id_venda FOREIGN KEY (id_venda) REFERENCES VENDAS(id_venda),
+    CONSTRAINT FK_id_produto  FOREIGN KEY (id_produto) REFERENCES PRODUTOS(id_produto)
+);
