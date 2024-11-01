@@ -2,7 +2,7 @@ CREATE SCHEMA CS3_SI1N ;
 USE CS3_SI1N;
 
 CREATE TABLE CLIENTES (
-    cod_cli INT PRIMARY KEY AUTO_INCREMENT,
+    cod_cli INT PRIMARY KEY,
     cnpj_cli VARCHAR(14) NOT NULL,
     razao_social_cli VARCHAR(100) NOT NULL,
     ramo_atividade_cli VARCHAR(50),
