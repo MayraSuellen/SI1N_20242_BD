@@ -53,7 +53,7 @@ CREATE TABLE FORNECEDORES (
     cnpj_fornecedores VARCHAR(14) PRIMARY KEY,
     razao_social_fornecedores VARCHAR(100) NOT NULL,
     pessoa_contato_fornecedores VARCHAR(100) NOT NULL,
-    telefone varchar (15) NOT NULL,
+    telefone VARCHAR (15) NOT NULL,
     id_end INT PRIMARY KEY,
     PRIMARY KEY (cnpj_fornecedores,id_end),
     CONSTRAINT FK_id_end FOREIGN KEY (id_end) REFERENCES ENDERECOS(id_end)
