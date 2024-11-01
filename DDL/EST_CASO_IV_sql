@@ -13,18 +13,18 @@ CREATE TABLE MODALIDADES (
     Descricao_modalidade TEXT NOT NULL
 );
 
-CREAT TABLE ALUNOS(
-    ID_aluno PRIMARY KEY,
+CREATE  TABLE ALUNO(
+    ID_aluno INT PRIMARY KEY,
     Nome_aluno VARCHAR(100) NOT NULL,
     CPF_aluno VARCHAR(11) NOT NULL,
     Data_Nascimento_aluno DATE NOT NULL,
-    rua_aluno  VARCHAR(45) DATE NOT NULL,
+    rua_aluno  VARCHAR(45)  NOT NULL,
     numrua_aluno INT,
     bairro_aluno VARCHAR(45) NOT NULL,
     cidade_aluno VARCHAR(45) NOT NULL,
     uf_aluno VARCHAR(10) NOT NULL,
     pais_aluno VARCHAR(30) NOT NULL,
-    telefone_aluno VARCHAR(15) NOT NULL
+    telefone_aluno VARCHAR(15) NOT NULL,
     ID_modalidade INT PRIMARY KEY,
     PRIMARY KEY (ID_aluno,ID_Modalidade),
     CONSTRAINT FK_ID_modalidade FOREIGN KEY(ID_modalidade) REFERENCES MODALIDADES(ID_modalidade)
@@ -37,19 +37,21 @@ CREATE TABLE PLANOS_TREINAMENTOS (
     Data_Atualizacao_plano DATE,
     ID_aluno INT PRIMARY KEY,
     ID_instrutor INT PRIMARY KEY,
+    PRIMARY KEY (ID_aluno,ID_instrutor),
     CONSTRAINT FK_aluno FOREIGN KEY (ID_Aluno) REFERENCES ALUNOS(ID_aluno),
     CONSTRAINT FK_instrutor FOREIGN KEY (ID_instrutor) REFERENCES INSTRUTORES(ID_instrutor)
 );
 
 CREATE TABLE AULAS (
     ID_aula INT PRIMARY KEY,
-    ID_modalidade INT,
-    ID_instrutor INT,
+    ID_modalidade INT PRIMARY KEY,
+    ID_instrutor INT PRIMARY KEY,
     Horario_aula TIME NOT NULL,
     Capacidade_aula INT NOT NULL,
-    Lotacao_atual_aula INT DEFAULT 0,
-    CONSTRAINT FK_FOREIGN KEY (ID_Modalidade) REFERENCES Modalidades(ID_Modalidade),
-    CONSTRAINT FK_FOREIGN KEY (ID_Instrutor) REFERENCES Instrutores(ID_Instrutor)
+    Lotacao_atual_aula INT ,
+    PRIMARY KEY (ID_modalidade,ID_instrutor),
+    CONSTRAINT FK_ID_modalidade FOREIGN KEY (ID_Modalidade) REFERENCES Modalidades(ID_Modalidade),
+    CONSTRAINT FK_ID_instrutor FOREIGN KEY (ID_Instrutor) REFERENCES Instrutores(ID_Instrutor)
 );
 
 CREATE TABLE PAGAMENTOS (
@@ -58,7 +60,7 @@ CREATE TABLE PAGAMENTOS (
     Valor_pagamento DECIMAL(10, 2) NOT NULL,
     Status_pagamento VARCHAR(30) NOT NULL,
     ID_aluno INT PRIMARY KEY,
-    PRIMARY KEY(ID_pagamento,ID_aluno)
+    PRIMARY KEY(ID_pagamento,ID_aluno),
     CONSTRAINT FK_ID_aluno FOREIGN KEY (ID_aluno) REFERENCES ALUNOS (ID_aluno)
 );
 
