@@ -53,7 +53,7 @@ CREATE TABLE FORNECEDORES (
     cnpj_fornecedores VARCHAR(14) PRIMARY KEY,
     razao_social_fornecedores VARCHAR(100) NOT NULL,
     pessoa_contato_fornecedores VARCHAR(100) NOT NULL,
-    telefone VARCHAL(100) NOT NULL,
+    telefone varchar (15) NOT NULL,
     id_end INT PRIMARY KEY,
     PRIMARY KEY (cnpj_fornecedores,id_end),
     CONSTRAINT FK_id_end FOREIGN KEY (id_end) REFERENCES ENDERECOS(id_end)
@@ -82,7 +82,7 @@ CREATE TABLE ENCOMENDAS (
     forma_pagamento_encomendas_id INT,
     quantidade_parcelas_encomendas INT,
     cod_cli INT PRIMARY KEY,
-    PRIMARY KEY (id_encomendas,cod_cli)
+    PRIMARY KEY (id_encomendas,cod_cli),
   CONSTRAINT FK_cod_cli  FOREIGN KEY (cod_cli) REFERENCES CLIENTES(cod_cli)
 );
 
@@ -109,7 +109,7 @@ CREATE TABLE COMPONENTES (
     quantidade_estoque_componentes INT NOT NULL,
     preco_unitario_componentes DECIMAL(10, 2) NOT NULL,
     unidade_componentes VARCHAR(20) NOT NULL,
-    cod_tipo_componentes INT PRIMARY KEY
+    cod_tipo_componentes INT PRIMARY KEY,
     cnpj_fornecedores VARCHAR(14) PRIMARY KEY,
     PRIMARY KEY (cod_componentes,cod_tipo_componentes,cnpj_fornecedores),
     CONSTRAINT FK_cod_tipo_componentes FOREIGN KEY (tipo_componente_codigo) REFERENCES TIPOS_COMPONENTE(cod_tipo_componentes),
